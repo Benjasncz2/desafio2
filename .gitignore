@@ -1,0 +1,19 @@
+# Variables de entorno
+.env
+.env.local
+.env.production
+.env.development
+
+# Archivos de configuración con datos sensibles
+config.json
+secrets.json
+credentials.json
+*.key
+*.pem
+
+# Logs
+*.log
+npm-debug.log*
+
+# Dependencias
+node_modules/
