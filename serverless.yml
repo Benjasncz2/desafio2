@@ -36,7 +36,7 @@ provider:
     DOCUMENT_AI_PROCESSOR_VERSION_ID: pretrained-foundation-model-v1.5.1-2025-08-07
 
 functions:
-  # 1️⃣ Subida de bono (opcional si la subida no viene desde API Gateway)
+  # subida de archivo
   uploadHandler:
     handler: src/handlers/uploadHandler.main
     events:
@@ -44,8 +44,7 @@ functions:
           path: upload
           method: post
           cors: true
-
-  # 2️⃣ Procesamiento con Google Document AI
+  # api con google doc ai
   processDocAi:
     handler: src/handlers/processDocAi.main
     timeout: 60
@@ -56,7 +55,7 @@ functions:
           event: s3:ObjectCreated:*
           existing: true
 
-  # 3️⃣ Guarda el resultado en DynamoDB
+  # guardar datos en dynamo
   saveResults:
     handler: src/handlers/saveResults.main
     events:
@@ -64,7 +63,6 @@ functions:
           arn: ${self:provider.environment.SNS_DOCAI_ARN}
           topicName: DocAiTopic
 
-  # 4️⃣ Validación y envío de datos a ISAPRE
   validateIsapre:
     handler: src/handlers/validateIsapre.main
     events:
