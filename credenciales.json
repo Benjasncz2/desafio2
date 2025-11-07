@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "river-lane-475622-h4",
+  "private_key_id": "bab9976bc7700010f3297b191a3d5742f0eab910",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCwt26OEqtZtrC1\nJq24ZifYSjINx5RZ1FAuxqSJKMge5q6Nzs4+YEOiqG7eCdQB80G1onqz/Tgqj0jQ\nY4x7n1RxnP3+pz33q8dCNVBf1fVswrh/u6tUDo9IyNNmG2J1Zp8bIdIrPiC+AGcz\nIuB5Fmx3IE57I0UrYcTIkg8x3XZQaENwJJEJL4iJtcFucVSMZQNfiaIW362edHhl\nYUN/6w7k/XTOegaWkarjac0IHUraglEhpnDz2V0unkf8cSmBTv5FqtKuK7PH98in\nvTR9qfhkU8NnwZN7wR2QlC4bUxN8zSXKWm6xASsobHOvPWfCjCgH1+IHpXJmbf6J\nNGxRNPcpAgMBAAECggEAFI49vKZ0ypJ64xN89Rxi6aCVym8K9VkCO7KtDGxTPO7x\n4npqGKzbaTYE8Wx8vf5VCCL+eWXMzPyOSHkv6+hYav/LNr4u8dqIKs4nS4KIkg5j\nZi5HC1fHOHztxCyOyx+1BbOtLg0Dw34qAvN9X3BpjQDTyDSN1PJCMN92h4MeglMw\noxFVPDuGdWq6SYYoiAeaCcGmuEqdwvxPUhk8ZNFWWT3OyBeDt34moa7v4dZzHUo8\nGVZWhYaSreok0zROGr3uU6Yu1zSj3EOQhbzW/SELJrP4GKoag2w4i9B7uXMoA7e0\nOg0ga0VY98vu1t1CHLoTFAH4N/HP2IDnpILkK1jKIQKBgQDvXfjp/QUNE5N+BHVd\nRW/Ys890rKYfpI6fRADSbwDxsdCyBhu1wr6Dl+W1EN9DUFS/lpinM9S6fkFZPykK\n1Sqo/m6zGorrY/fxmJ6q2TtGEbdMEHk7syL0qcfE70mToBQ7PF3LF5vvkmb3o14s\nytsAxVfjSgGDzHIhTmXFENDW+QKBgQC8/vz0qReCvgAWWyJ5P3s4vwe+NjiUNeOF\nUGfa402X9nZyPaq+xeBL5V4CkK6FRw2+00xSUFCF03hRkP3k9glqTlQgRNJFcWAv\nIhSmEfDF/kAftKHj7TsFGBhYe/kyZNqzePHRhFS2BxOo5rgd+pUG6wTExg0u9Uzd\nvqFUPQ89sQKBgF4bjg9AgMnhVm2HBzWCZTTHjNqMPkvWgJQxQjl5lt9vT2OObzqI\ntCo8f/0uAvkODiO864thH1Oq67pQ0KwHntwOHCuiVdex1/tOS6NUAK/Nq0jmeSN1\njFqwnW/ZvA2kNBAN7bo5L/+CiaT2v8HQh0XIUIN1xx6wNHbPwcc2k0TRAoGAayjM\n9lAVw4zFceeUgVjsHf26fzAxHl/7tDAl4qc07K/S8u1iLa72gTH4/s1YFrt14Lff\ns2BUd7yyoNTsEHEsX3kwG+fJrZQeLDtPp+XONgT2CMQbcqek6juCOlF4twkWM+Kk\ngd5dRaR3kjHXPTBCZVzGJGgDO5fcUHJw+NlyFdECgYBUq0gh8VLfKh5A57pixOhF\n8aLN97Fonq+t/mee+DEE1WQIXQrroGkcMgvACbfr+X7f3sGgl3Db7KV0poN3cxWB\n6Y3vCdNuliFTYA7Pui6yYeVqtp/eTMIpHovzmL1L9mYZCBIsK6RlwvZPx9tN8BWd\nQ6XS3H5uepSon+Ik0P/Yzw==\n-----END PRIVATE KEY-----\n",
+  "client_email": "documentai-service-account@river-lane-475622-h4.iam.gserviceaccount.com",
+  "client_id": "107547594413946719564",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/documentai-service-account%40river-lane-475622-h4.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

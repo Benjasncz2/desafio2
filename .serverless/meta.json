@@ -1,0 +1,2033 @@
+{
+  "/home/banja/.aws/sls_desafio/serverless.yml": {
+    "versionFramework": "4.23.0",
+    "servicePath": "/home/banja/.aws/sls_desafio/serverless.yml",
+    "serviceConfigFileName": "serverless.yml",
+    "service": {
+      "service": "arquitectura-docai",
+      "plugins": [
+        "serverless-prune-plugin",
+        "serverless-scriptable-plugin",
+        "serverless-offline"
+      ],
+      "custom": {
+        "serverless-offline": {
+          "httpPort": 3005,
+          "lambdaPort": 3006,
+          "noPrependStageInUrl": true
+        },
+        "prune": {
+          "automatic": true,
+          "number": 5
+        }
+      },
+      "provider": {
+        "name": "aws",
+        "runtime": "nodejs20.x",
+        "region": "us-east-1",
+        "role": "arn:aws:iam::905418069528:role/LabRole",
+        "cfnRole": "arn:aws:iam::905418069528:role/LabRole",
+        "environment": {
+          "BUCKET": "docai-pipeline-bucket-dev",
+          "DDB_TABLE": "DocAiResults-dev",
+          "SNS_ISAPRE_ARN": {
+            "Ref": "IsapreTopic"
+          },
+          "SNS_DOCAI_ARN": {
+            "Ref": "DocAiTopic"
+          },
+          "DOCUMENT_AI_PROJECT_ID": "river-lane-475622-h4",
+          "DOCUMENT_AI_LOCATION": "us",
+          "DOCUMENT_AI_PROCESSOR_ID": "b9319e0d7e047ae5",
+          "DOCUMENT_AI_PROCESSOR_VERSION_ID": "pretrained-foundation-model-v1.5.1-2025-08-07"
+        },
+        "stage": "dev",
+        "versionFunctions": true,
+        "compiledCloudFormationTemplate": {
+          "AWSTemplateFormatVersion": "2010-09-09",
+          "Description": "The AWS CloudFormation template for this Serverless application",
+          "Resources": {
+            "UploadHandlerLogGroup": {
+              "Type": "AWS::Logs::LogGroup",
+              "Properties": {
+                "LogGroupName": "/aws/lambda/arquitectura-docai-dev-uploadHandler"
+              }
+            },
+            "ProcessDocAiLogGroup": {
+              "Type": "AWS::Logs::LogGroup",
+              "Properties": {
+                "LogGroupName": "/aws/lambda/arquitectura-docai-dev-processDocAi"
+              }
+            },
+            "SaveResultsLogGroup": {
+              "Type": "AWS::Logs::LogGroup",
+              "Properties": {
+                "LogGroupName": "/aws/lambda/arquitectura-docai-dev-saveResults"
+              }
+            },
+            "ValidateIsapreLogGroup": {
+              "Type": "AWS::Logs::LogGroup",
+              "Properties": {
+                "LogGroupName": "/aws/lambda/arquitectura-docai-dev-validateIsapre"
+              }
+            },
+            "UploadHandlerLambdaFunction": {
+              "Type": "AWS::Lambda::Function",
+              "Properties": {
+                "Code": {
+                  "S3Bucket": "serverless-framework-deployments-us-east-1-cdd5d4b1-5fe9",
+                  "S3Key": "serverless/arquitectura-docai/dev/1762436817685-2025-11-06T13:46:57.685Z/arquitectura-docai.zip"
+                },
+                "Handler": "src/handlers/uploadHandler.main",
+                "Runtime": "nodejs20.x",
+                "FunctionName": "arquitectura-docai-dev-uploadHandler",
+                "MemorySize": 1024,
+                "Timeout": 6,
+                "Environment": {
+                  "Variables": {
+                    "BUCKET": "docai-pipeline-bucket-dev",
+                    "DDB_TABLE": "DocAiResults-dev",
+                    "SNS_ISAPRE_ARN": {
+                      "Ref": "IsapreTopic"
+                    },
+                    "SNS_DOCAI_ARN": {
+                      "Ref": "DocAiTopic"
+                    },
+                    "DOCUMENT_AI_PROJECT_ID": "river-lane-475622-h4",
+                    "DOCUMENT_AI_LOCATION": "us",
+                    "DOCUMENT_AI_PROCESSOR_ID": "b9319e0d7e047ae5",
+                    "DOCUMENT_AI_PROCESSOR_VERSION_ID": "pretrained-foundation-model-v1.5.1-2025-08-07"
+                  }
+                },
+                "Role": "arn:aws:iam::905418069528:role/LabRole"
+              },
+              "DependsOn": [
+                "UploadHandlerLogGroup"
+              ]
+            },
+            "ProcessDocAiLambdaFunction": {
+              "Type": "AWS::Lambda::Function",
+              "Properties": {
+                "Code": {
+                  "S3Bucket": "serverless-framework-deployments-us-east-1-cdd5d4b1-5fe9",
+                  "S3Key": "serverless/arquitectura-docai/dev/1762436817685-2025-11-06T13:46:57.685Z/arquitectura-docai.zip"
+                },
+                "Handler": "src/handlers/processDocAi.main",
+                "Runtime": "nodejs20.x",
+                "FunctionName": "arquitectura-docai-dev-processDocAi",
+                "MemorySize": 512,
+                "Timeout": 60,
+                "Environment": {
+                  "Variables": {
+                    "BUCKET": "docai-pipeline-bucket-dev",
+                    "DDB_TABLE": "DocAiResults-dev",
+                    "SNS_ISAPRE_ARN": {
+                      "Ref": "IsapreTopic"
+                    },
+                    "SNS_DOCAI_ARN": {
+                      "Ref": "DocAiTopic"
+                    },
+                    "DOCUMENT_AI_PROJECT_ID": "river-lane-475622-h4",
+                    "DOCUMENT_AI_LOCATION": "us",
+                    "DOCUMENT_AI_PROCESSOR_ID": "b9319e0d7e047ae5",
+                    "DOCUMENT_AI_PROCESSOR_VERSION_ID": "pretrained-foundation-model-v1.5.1-2025-08-07"
+                  }
+                },
+                "Role": "arn:aws:iam::905418069528:role/LabRole"
+              },
+              "DependsOn": [
+                "ProcessDocAiLogGroup"
+              ]
+            },
+            "SaveResultsLambdaFunction": {
+              "Type": "AWS::Lambda::Function",
+              "Properties": {
+                "Code": {
+                  "S3Bucket": "serverless-framework-deployments-us-east-1-cdd5d4b1-5fe9",
+                  "S3Key": "serverless/arquitectura-docai/dev/1762436817685-2025-11-06T13:46:57.685Z/arquitectura-docai.zip"
+                },
+                "Handler": "src/handlers/saveResults.main",
+                "Runtime": "nodejs20.x",
+                "FunctionName": "arquitectura-docai-dev-saveResults",
+                "MemorySize": 1024,
+                "Timeout": 6,
+                "Environment": {
+                  "Variables": {
+                    "BUCKET": "docai-pipeline-bucket-dev",
+                    "DDB_TABLE": "DocAiResults-dev",
+                    "SNS_ISAPRE_ARN": {
+                      "Ref": "IsapreTopic"
+                    },
+                    "SNS_DOCAI_ARN": {
+                      "Ref": "DocAiTopic"
+                    },
+                    "DOCUMENT_AI_PROJECT_ID": "river-lane-475622-h4",
+                    "DOCUMENT_AI_LOCATION": "us",
+                    "DOCUMENT_AI_PROCESSOR_ID": "b9319e0d7e047ae5",
+                    "DOCUMENT_AI_PROCESSOR_VERSION_ID": "pretrained-foundation-model-v1.5.1-2025-08-07"
+                  }
+                },
+                "Role": "arn:aws:iam::905418069528:role/LabRole"
+              },
+              "DependsOn": [
+                "SaveResultsLogGroup"
+              ]
+            },
+            "ValidateIsapreLambdaFunction": {
+              "Type": "AWS::Lambda::Function",
+              "Properties": {
+                "Code": {
+                  "S3Bucket": "serverless-framework-deployments-us-east-1-cdd5d4b1-5fe9",
+                  "S3Key": "serverless/arquitectura-docai/dev/1762436817685-2025-11-06T13:46:57.685Z/arquitectura-docai.zip"
+                },
+                "Handler": "src/handlers/validateIsapre.main",
+                "Runtime": "nodejs20.x",
+                "FunctionName": "arquitectura-docai-dev-validateIsapre",
+                "MemorySize": 1024,
+                "Timeout": 6,
+                "Environment": {
+                  "Variables": {
+                    "BUCKET": "docai-pipeline-bucket-dev",
+                    "DDB_TABLE": "DocAiResults-dev",
+                    "SNS_ISAPRE_ARN": {
+                      "Ref": "IsapreTopic"
+                    },
+                    "SNS_DOCAI_ARN": {
+                      "Ref": "DocAiTopic"
+                    },
+                    "DOCUMENT_AI_PROJECT_ID": "river-lane-475622-h4",
+                    "DOCUMENT_AI_LOCATION": "us",
+                    "DOCUMENT_AI_PROCESSOR_ID": "b9319e0d7e047ae5",
+                    "DOCUMENT_AI_PROCESSOR_VERSION_ID": "pretrained-foundation-model-v1.5.1-2025-08-07"
+                  }
+                },
+                "Role": "arn:aws:iam::905418069528:role/LabRole"
+              },
+              "DependsOn": [
+                "ValidateIsapreLogGroup"
+              ]
+            },
+            "UploadHandlerLambdaVersionFea324X5kT4clQLFmAoQMD4N4s37GM3wTSBIXaj36Ng": {
+              "Type": "AWS::Lambda::Version",
+              "DeletionPolicy": "Retain",
+              "Properties": {
+                "FunctionName": {
+                  "Ref": "UploadHandlerLambdaFunction"
+                },
+                "CodeSha256": "dhyHKzTsVWnK+P4tsp3GKTY7lUKGlEFBez9OEm9Nras="
+              }
+            },
+            "ProcessDocAiLambdaVersionkqiDfrmli5mNWyyLzHqeNDpXXNcUtMkIYh4eWBTM": {
+              "Type": "AWS::Lambda::Version",
+              "DeletionPolicy": "Retain",
+              "Properties": {
+                "FunctionName": {
+                  "Ref": "ProcessDocAiLambdaFunction"
+                },
+                "CodeSha256": "dhyHKzTsVWnK+P4tsp3GKTY7lUKGlEFBez9OEm9Nras="
+              }
+            },
+            "SaveResultsLambdaVersionOnOqym9blbwi4RtSFTfCQE6XKOitw2LKh6AMp5oxgK4": {
+              "Type": "AWS::Lambda::Version",
+              "DeletionPolicy": "Retain",
+              "Properties": {
+                "FunctionName": {
+                  "Ref": "SaveResultsLambdaFunction"
+                },
+                "CodeSha256": "dhyHKzTsVWnK+P4tsp3GKTY7lUKGlEFBez9OEm9Nras="
+              }
+            },
+            "ValidateIsapreLambdaVersionCva7SRgBZlIYkU8fPHuBTLsDPUVHKXWSVfbAbVsUU": {
+              "Type": "AWS::Lambda::Version",
+              "DeletionPolicy": "Retain",
+              "Properties": {
+                "FunctionName": {
+                  "Ref": "ValidateIsapreLambdaFunction"
+                },
+                "CodeSha256": "dhyHKzTsVWnK+P4tsp3GKTY7lUKGlEFBez9OEm9Nras="
+              }
+            },
+            "ProcessDocAiCustomS31": {
+              "Type": "Custom::S3",
+              "Version": "1.0",
+              "DependsOn": [
+                "ProcessDocAiLambdaFunction",
+                "CustomDashresourceDashexistingDashs3LambdaFunction"
+              ],
+              "Properties": {
+                "ServiceToken": "<REDACTED>",
+                "FunctionName": "arquitectura-docai-dev-processDocAi",
+                "BucketName": "docai-pipeline-bucket-dev",
+                "BucketConfigs": [
+                  {
+                    "Event": "s3:ObjectCreated:*",
+                    "Rules": []
+                  }
+                ]
+              }
+            },
+            "CustomDashresourceDashexistingDashs3LambdaFunction": {
+              "Type": "AWS::Lambda::Function",
+              "Properties": {
+                "Code": {
+                  "S3Bucket": "serverless-framework-deployments-us-east-1-cdd5d4b1-5fe9",
+                  "S3Key": "serverless/arquitectura-docai/dev/1762436817685-2025-11-06T13:46:57.685Z/custom-resources.zip"
+                },
+                "FunctionName": "arquitectura-docai-dev-custom-resource-existing-s3",
+                "Handler": "s3/handler.handler",
+                "MemorySize": 1024,
+                "Runtime": "nodejs22.x",
+                "Timeout": 180,
+                "Role": "arn:aws:iam::905418069528:role/LabRole"
+              },
+              "DependsOn": [
+                "CustomDashresourceDashexistingDashs3LogGroup"
+              ]
+            },
+            "CustomDashresourceDashexistingDashs3LogGroup": {
+              "Type": "AWS::Logs::LogGroup",
+              "Properties": {
+                "LogGroupName": "/aws/lambda/arquitectura-docai-dev-custom-resource-existing-s3"
+              }
+            },
+            "ApiGatewayRestApi": {
+              "Type": "AWS::ApiGateway::RestApi",
+              "Properties": {
+                "Name": "dev-arquitectura-docai",
+                "EndpointConfiguration": {
+                  "Types": [
+                    "EDGE"
+                  ]
+                },
+                "Policy": ""
+              }
+            },
+            "ApiGatewayResourceUpload": {
+              "Type": "AWS::ApiGateway::Resource",
+              "Properties": {
+                "ParentId": {
+                  "Fn::GetAtt": [
+                    "ApiGatewayRestApi",
+                    "RootResourceId"
+                  ]
+                },
+                "PathPart": "upload",
+                "RestApiId": {
+                  "Ref": "ApiGatewayRestApi"
+                }
+              }
+            },
+            "ApiGatewayMethodUploadOptions": {
+              "Type": "AWS::ApiGateway::Method",
+              "Properties": {
+                "AuthorizationType": "NONE",
+                "HttpMethod": "OPTIONS",
+                "MethodResponses": [
+                  {
+                    "StatusCode": "200",
+                    "ResponseParameters": {
+                      "method.response.header.Access-Control-Allow-Origin": true,
+                      "method.response.header.Access-Control-Allow-Headers": true,
+                      "method.response.header.Access-Control-Allow-Methods": true
+                    },
+                    "ResponseModels": {}
+                  }
+                ],
+                "RequestParameters": {},
+                "Integration": {
+                  "Type": "MOCK",
+                  "RequestTemplates": {
+                    "application/json": "{statusCode:200}"
+                  },
+                  "ContentHandling": "CONVERT_TO_TEXT",
+                  "IntegrationResponses": [
+                    {
+                      "StatusCode": "200",
+                      "ResponseParameters": {
+                        "method.response.header.Access-Control-Allow-Origin": "'*'",
+                        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'",
+                        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'"
+                      },
+                      "ResponseTemplates": {
+                        "application/json": ""
+                      }
+                    }
+                  ]
+                },
+                "ResourceId": {
+                  "Ref": "ApiGatewayResourceUpload"
+                },
+                "RestApiId": {
+                  "Ref": "ApiGatewayRestApi"
+                }
+              }
+            },
+            "ApiGatewayMethodUploadPost": {
+              "Type": "AWS::ApiGateway::Method",
+              "Properties": {
+                "HttpMethod": "POST",
+                "RequestParameters": {},
+                "ResourceId": {
+                  "Ref": "ApiGatewayResourceUpload"
+                },
+                "RestApiId": {
+                  "Ref": "ApiGatewayRestApi"
+                },
+                "ApiKeyRequired": "<REDACTED>",
+                "AuthorizationType": "NONE",
+                "Integration": {
+                  "IntegrationHttpMethod": "POST",
+                  "Type": "AWS_PROXY",
+                  "Uri": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:",
+                        {
+                          "Ref": "AWS::Partition"
+                        },
+                        ":apigateway:",
+                        {
+                          "Ref": "AWS::Region"
+                        },
+                        ":lambda:path/2015-03-31/functions/",
+                        {
+                          "Fn::GetAtt": [
+                            "UploadHandlerLambdaFunction",
+                            "Arn"
+                          ]
+                        },
+                        "/invocations"
+                      ]
+                    ]
+                  }
+                },
+                "MethodResponses": []
+              },
+              "DependsOn": [
+                "UploadHandlerLambdaPermissionApiGateway"
+              ]
+            },
+            "ApiGatewayDeployment1762436800340": {
+              "Type": "AWS::ApiGateway::Deployment",
+              "Properties": {
+                "RestApiId": {
+                  "Ref": "ApiGatewayRestApi"
+                },
+                "StageName": "dev"
+              },
+              "DependsOn": [
+                "ApiGatewayMethodUploadOptions",
+                "ApiGatewayMethodUploadPost"
+              ]
+            },
+            "UploadHandlerLambdaPermissionApiGateway": {
+              "Type": "AWS::Lambda::Permission",
+              "Properties": {
+                "FunctionName": {
+                  "Fn::GetAtt": [
+                    "UploadHandlerLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "Action": "lambda:InvokeFunction",
+                "Principal": "apigateway.amazonaws.com",
+                "SourceArn": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":execute-api:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":",
+                      {
+                        "Ref": "ApiGatewayRestApi"
+                      },
+                      "/*/*"
+                    ]
+                  ]
+                }
+              }
+            },
+            "SaveResultsSnsSubscriptionDocAiTopic": {
+              "Type": "AWS::SNS::Subscription",
+              "Properties": {
+                "TopicArn": {
+                  "Ref": "DocAiTopic"
+                },
+                "Protocol": "lambda",
+                "Endpoint": {
+                  "Fn::GetAtt": [
+                    "SaveResultsLambdaFunction",
+                    "Arn"
+                  ]
+                }
+              }
+            },
+            "SaveResultsLambdaPermissionDocAiTopicSNS": {
+              "Type": "AWS::Lambda::Permission",
+              "Properties": {
+                "FunctionName": {
+                  "Fn::GetAtt": [
+                    "SaveResultsLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "Action": "lambda:InvokeFunction",
+                "Principal": "sns.amazonaws.com",
+                "SourceArn": {
+                  "Ref": "DocAiTopic"
+                }
+              }
+            },
+            "ValidateIsapreSnsSubscriptionIsapreTopic": {
+              "Type": "AWS::SNS::Subscription",
+              "Properties": {
+                "TopicArn": {
+                  "Ref": "IsapreTopic"
+                },
+                "Protocol": "lambda",
+                "Endpoint": {
+                  "Fn::GetAtt": [
+                    "ValidateIsapreLambdaFunction",
+                    "Arn"
+                  ]
+                }
+              }
+            },
+            "ValidateIsapreLambdaPermissionIsapreTopicSNS": {
+              "Type": "AWS::Lambda::Permission",
+              "Properties": {
+                "FunctionName": {
+                  "Fn::GetAtt": [
+                    "ValidateIsapreLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "Action": "lambda:InvokeFunction",
+                "Principal": "sns.amazonaws.com",
+                "SourceArn": {
+                  "Ref": "IsapreTopic"
+                }
+              }
+            },
+            "DocAiTopic": {
+              "Type": "AWS::SNS::Topic",
+              "Properties": {
+                "TopicName": "DocAiTopic"
+              }
+            },
+            "IsapreTopic": {
+              "Type": "AWS::SNS::Topic",
+              "Properties": {
+                "TopicName": "IsapreTopic"
+              }
+            },
+            "DocAiResultsTable": {
+              "Type": "AWS::DynamoDB::Table",
+              "Properties": {
+                "TableName": "DocAiResults-dev",
+                "AttributeDefinitions": [
+                  {
+                    "AttributeName": "Id",
+                    "AttributeType": "S"
+                  }
+                ],
+                "KeySchema": [
+                  {
+                    "AttributeName": "Id",
+                    "KeyType": "HASH"
+                  }
+                ],
+                "BillingMode": "PAY_PER_REQUEST"
+              }
+            },
+            "DocAiBucket": {
+              "Type": "AWS::S3::Bucket",
+              "Properties": {
+                "BucketName": "docai-pipeline-bucket-dev"
+              }
+            }
+          },
+          "Outputs": {
+            "ServerlessDeploymentBucketName": {
+              "Value": "serverless-framework-deployments-us-east-1-cdd5d4b1-5fe9",
+              "Export": {
+                "Name": "sls-arquitectura-docai-dev-ServerlessDeploymentBucketName"
+              }
+            },
+            "UploadHandlerLambdaFunctionQualifiedArn": {
+              "Description": "Current Lambda function version",
+              "Value": {
+                "Ref": "UploadHandlerLambdaVersionFea324X5kT4clQLFmAoQMD4N4s37GM3wTSBIXaj36Ng"
+              },
+              "Export": {
+                "Name": "sls-arquitectura-docai-dev-UploadHandlerLambdaFunctionQualifiedArn"
+              }
+            },
+            "ProcessDocAiLambdaFunctionQualifiedArn": {
+              "Description": "Current Lambda function version",
+              "Value": {
+                "Ref": "ProcessDocAiLambdaVersionkqiDfrmli5mNWyyLzHqeNDpXXNcUtMkIYh4eWBTM"
+              },
+              "Export": {
+                "Name": "sls-arquitectura-docai-dev-ProcessDocAiLambdaFunctionQualifiedArn"
+              }
+            },
+            "SaveResultsLambdaFunctionQualifiedArn": {
+              "Description": "Current Lambda function version",
+              "Value": {
+                "Ref": "SaveResultsLambdaVersionOnOqym9blbwi4RtSFTfCQE6XKOitw2LKh6AMp5oxgK4"
+              },
+              "Export": {
+                "Name": "sls-arquitectura-docai-dev-SaveResultsLambdaFunctionQualifiedArn"
+              }
+            },
+            "ValidateIsapreLambdaFunctionQualifiedArn": {
+              "Description": "Current Lambda function version",
+              "Value": {
+                "Ref": "ValidateIsapreLambdaVersionCva7SRgBZlIYkU8fPHuBTLsDPUVHKXWSVfbAbVsUU"
+              },
+              "Export": {
+                "Name": "sls-arquitectura-docai-dev-ValidateIsapreLambdaFunctionQualifiedArn"
+              }
+            },
+            "ServiceEndpoint": {
+              "Description": "URL of the service endpoint",
+              "Value": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "https://",
+                    {
+                      "Ref": "ApiGatewayRestApi"
+                    },
+                    ".execute-api.",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ".",
+                    {
+                      "Ref": "AWS::URLSuffix"
+                    },
+                    "/dev"
+                  ]
+                ]
+              },
+              "Export": {
+                "Name": "sls-arquitectura-docai-dev-ServiceEndpoint"
+              }
+            }
+          }
+        },
+        "vpc": {}
+      },
+      "functions": {
+        "uploadHandler": {
+          "handler": "src/handlers/uploadHandler.main",
+          "events": [
+            {
+              "http": {
+                "path": "upload",
+                "method": "post",
+                "cors": {
+                  "origin": "*",
+                  "methods": [
+                    "OPTIONS",
+                    "POST"
+                  ],
+                  "headers": [
+                    "Content-Type",
+                    "X-Amz-Date",
+                    "Authorization",
+                    "X-Api-Key",
+                    "X-Amz-Security-Token",
+                    "X-Amz-User-Agent",
+                    "X-Amzn-Trace-Id"
+                  ],
+                  "allowCredentials": "<REDACTED>"
+                },
+                "integration": "AWS_PROXY"
+              }
+            }
+          ],
+          "name": "arquitectura-docai-dev-uploadHandler",
+          "package": {},
+          "memory": 1024,
+          "timeout": 6,
+          "runtime": "nodejs20.x",
+          "vpc": {},
+          "versionLogicalId": "UploadHandlerLambdaVersionFea324X5kT4clQLFmAoQMD4N4s37GM3wTSBIXaj36Ng"
+        },
+        "processDocAi": {
+          "handler": "src/handlers/processDocAi.main",
+          "timeout": 60,
+          "memorySize": 512,
+          "events": [
+            {
+              "s3": {
+                "bucket": "docai-pipeline-bucket-dev",
+                "event": "s3:ObjectCreated:*",
+                "existing": true
+              }
+            }
+          ],
+          "name": "arquitectura-docai-dev-processDocAi",
+          "package": {},
+          "memory": 512,
+          "runtime": "nodejs20.x",
+          "vpc": {},
+          "versionLogicalId": "ProcessDocAiLambdaVersionkqiDfrmli5mNWyyLzHqeNDpXXNcUtMkIYh4eWBTM"
+        },
+        "saveResults": {
+          "handler": "src/handlers/saveResults.main",
+          "events": [
+            {
+              "sns": {
+                "arn": {
+                  "Ref": "DocAiTopic"
+                },
+                "topicName": "DocAiTopic"
+              }
+            }
+          ],
+          "name": "arquitectura-docai-dev-saveResults",
+          "package": {},
+          "memory": 1024,
+          "timeout": 6,
+          "runtime": "nodejs20.x",
+          "vpc": {},
+          "versionLogicalId": "SaveResultsLambdaVersionOnOqym9blbwi4RtSFTfCQE6XKOitw2LKh6AMp5oxgK4"
+        },
+        "validateIsapre": {
+          "handler": "src/handlers/validateIsapre.main",
+          "events": [
+            {
+              "sns": {
+                "arn": {
+                  "Ref": "IsapreTopic"
+                },
+                "topicName": "IsapreTopic"
+              }
+            }
+          ],
+          "name": "arquitectura-docai-dev-validateIsapre",
+          "package": {},
+          "memory": 1024,
+          "timeout": 6,
+          "runtime": "nodejs20.x",
+          "vpc": {},
+          "versionLogicalId": "ValidateIsapreLambdaVersionCva7SRgBZlIYkU8fPHuBTLsDPUVHKXWSVfbAbVsUU"
+        }
+      },
+      "resources": {
+        "Resources": {
+          "DocAiTopic": {
+            "Type": "AWS::SNS::Topic",
+            "Properties": {
+              "TopicName": "DocAiTopic"
+            }
+          },
+          "IsapreTopic": {
+            "Type": "AWS::SNS::Topic",
+            "Properties": {
+              "TopicName": "IsapreTopic"
+            }
+          },
+          "DocAiResultsTable": {
+            "Type": "AWS::DynamoDB::Table",
+            "Properties": {
+              "TableName": "DocAiResults-dev",
+              "AttributeDefinitions": [
+                {
+                  "AttributeName": "Id",
+                  "AttributeType": "S"
+                }
+              ],
+              "KeySchema": [
+                {
+                  "AttributeName": "Id",
+                  "KeyType": "HASH"
+                }
+              ],
+              "BillingMode": "PAY_PER_REQUEST"
+            }
+          },
+          "DocAiBucket": {
+            "Type": "AWS::S3::Bucket",
+            "Properties": {
+              "BucketName": "docai-pipeline-bucket-dev"
+            }
+          }
+        },
+        "Outputs": {}
+      }
+    },
+    "provider": {
+      "name": "aws",
+      "runtime": "nodejs20.x",
+      "region": "us-east-1",
+      "role": "arn:aws:iam::905418069528:role/LabRole",
+      "cfnRole": "arn:aws:iam::905418069528:role/LabRole",
+      "environment": {
+        "BUCKET": "docai-pipeline-bucket-dev",
+        "DDB_TABLE": "DocAiResults-dev",
+        "SNS_ISAPRE_ARN": {
+          "Ref": "IsapreTopic"
+        },
+        "SNS_DOCAI_ARN": {
+          "Ref": "DocAiTopic"
+        },
+        "DOCUMENT_AI_PROJECT_ID": "river-lane-475622-h4",
+        "DOCUMENT_AI_LOCATION": "us",
+        "DOCUMENT_AI_PROCESSOR_ID": "b9319e0d7e047ae5",
+        "DOCUMENT_AI_PROCESSOR_VERSION_ID": "pretrained-foundation-model-v1.5.1-2025-08-07"
+      },
+      "stage": "dev",
+      "versionFunctions": true,
+      "compiledCloudFormationTemplate": {
+        "AWSTemplateFormatVersion": "2010-09-09",
+        "Description": "The AWS CloudFormation template for this Serverless application",
+        "Resources": {
+          "UploadHandlerLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/arquitectura-docai-dev-uploadHandler"
+            }
+          },
+          "ProcessDocAiLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/arquitectura-docai-dev-processDocAi"
+            }
+          },
+          "SaveResultsLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/arquitectura-docai-dev-saveResults"
+            }
+          },
+          "ValidateIsapreLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/arquitectura-docai-dev-validateIsapre"
+            }
+          },
+          "UploadHandlerLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": "serverless-framework-deployments-us-east-1-cdd5d4b1-5fe9",
+                "S3Key": "serverless/arquitectura-docai/dev/1762436817685-2025-11-06T13:46:57.685Z/arquitectura-docai.zip"
+              },
+              "Handler": "src/handlers/uploadHandler.main",
+              "Runtime": "nodejs20.x",
+              "FunctionName": "arquitectura-docai-dev-uploadHandler",
+              "MemorySize": 1024,
+              "Timeout": 6,
+              "Environment": {
+                "Variables": {
+                  "BUCKET": "docai-pipeline-bucket-dev",
+                  "DDB_TABLE": "DocAiResults-dev",
+                  "SNS_ISAPRE_ARN": {
+                    "Ref": "IsapreTopic"
+                  },
+                  "SNS_DOCAI_ARN": {
+                    "Ref": "DocAiTopic"
+                  },
+                  "DOCUMENT_AI_PROJECT_ID": "river-lane-475622-h4",
+                  "DOCUMENT_AI_LOCATION": "us",
+                  "DOCUMENT_AI_PROCESSOR_ID": "b9319e0d7e047ae5",
+                  "DOCUMENT_AI_PROCESSOR_VERSION_ID": "pretrained-foundation-model-v1.5.1-2025-08-07"
+                }
+              },
+              "Role": "arn:aws:iam::905418069528:role/LabRole"
+            },
+            "DependsOn": [
+              "UploadHandlerLogGroup"
+            ]
+          },
+          "ProcessDocAiLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": "serverless-framework-deployments-us-east-1-cdd5d4b1-5fe9",
+                "S3Key": "serverless/arquitectura-docai/dev/1762436817685-2025-11-06T13:46:57.685Z/arquitectura-docai.zip"
+              },
+              "Handler": "src/handlers/processDocAi.main",
+              "Runtime": "nodejs20.x",
+              "FunctionName": "arquitectura-docai-dev-processDocAi",
+              "MemorySize": 512,
+              "Timeout": 60,
+              "Environment": {
+                "Variables": {
+                  "BUCKET": "docai-pipeline-bucket-dev",
+                  "DDB_TABLE": "DocAiResults-dev",
+                  "SNS_ISAPRE_ARN": {
+                    "Ref": "IsapreTopic"
+                  },
+                  "SNS_DOCAI_ARN": {
+                    "Ref": "DocAiTopic"
+                  },
+                  "DOCUMENT_AI_PROJECT_ID": "river-lane-475622-h4",
+                  "DOCUMENT_AI_LOCATION": "us",
+                  "DOCUMENT_AI_PROCESSOR_ID": "b9319e0d7e047ae5",
+                  "DOCUMENT_AI_PROCESSOR_VERSION_ID": "pretrained-foundation-model-v1.5.1-2025-08-07"
+                }
+              },
+              "Role": "arn:aws:iam::905418069528:role/LabRole"
+            },
+            "DependsOn": [
+              "ProcessDocAiLogGroup"
+            ]
+          },
+          "SaveResultsLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": "serverless-framework-deployments-us-east-1-cdd5d4b1-5fe9",
+                "S3Key": "serverless/arquitectura-docai/dev/1762436817685-2025-11-06T13:46:57.685Z/arquitectura-docai.zip"
+              },
+              "Handler": "src/handlers/saveResults.main",
+              "Runtime": "nodejs20.x",
+              "FunctionName": "arquitectura-docai-dev-saveResults",
+              "MemorySize": 1024,
+              "Timeout": 6,
+              "Environment": {
+                "Variables": {
+                  "BUCKET": "docai-pipeline-bucket-dev",
+                  "DDB_TABLE": "DocAiResults-dev",
+                  "SNS_ISAPRE_ARN": {
+                    "Ref": "IsapreTopic"
+                  },
+                  "SNS_DOCAI_ARN": {
+                    "Ref": "DocAiTopic"
+                  },
+                  "DOCUMENT_AI_PROJECT_ID": "river-lane-475622-h4",
+                  "DOCUMENT_AI_LOCATION": "us",
+                  "DOCUMENT_AI_PROCESSOR_ID": "b9319e0d7e047ae5",
+                  "DOCUMENT_AI_PROCESSOR_VERSION_ID": "pretrained-foundation-model-v1.5.1-2025-08-07"
+                }
+              },
+              "Role": "arn:aws:iam::905418069528:role/LabRole"
+            },
+            "DependsOn": [
+              "SaveResultsLogGroup"
+            ]
+          },
+          "ValidateIsapreLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": "serverless-framework-deployments-us-east-1-cdd5d4b1-5fe9",
+                "S3Key": "serverless/arquitectura-docai/dev/1762436817685-2025-11-06T13:46:57.685Z/arquitectura-docai.zip"
+              },
+              "Handler": "src/handlers/validateIsapre.main",
+              "Runtime": "nodejs20.x",
+              "FunctionName": "arquitectura-docai-dev-validateIsapre",
+              "MemorySize": 1024,
+              "Timeout": 6,
+              "Environment": {
+                "Variables": {
+                  "BUCKET": "docai-pipeline-bucket-dev",
+                  "DDB_TABLE": "DocAiResults-dev",
+                  "SNS_ISAPRE_ARN": {
+                    "Ref": "IsapreTopic"
+                  },
+                  "SNS_DOCAI_ARN": {
+                    "Ref": "DocAiTopic"
+                  },
+                  "DOCUMENT_AI_PROJECT_ID": "river-lane-475622-h4",
+                  "DOCUMENT_AI_LOCATION": "us",
+                  "DOCUMENT_AI_PROCESSOR_ID": "b9319e0d7e047ae5",
+                  "DOCUMENT_AI_PROCESSOR_VERSION_ID": "pretrained-foundation-model-v1.5.1-2025-08-07"
+                }
+              },
+              "Role": "arn:aws:iam::905418069528:role/LabRole"
+            },
+            "DependsOn": [
+              "ValidateIsapreLogGroup"
+            ]
+          },
+          "UploadHandlerLambdaVersionFea324X5kT4clQLFmAoQMD4N4s37GM3wTSBIXaj36Ng": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "UploadHandlerLambdaFunction"
+              },
+              "CodeSha256": "dhyHKzTsVWnK+P4tsp3GKTY7lUKGlEFBez9OEm9Nras="
+            }
+          },
+          "ProcessDocAiLambdaVersionkqiDfrmli5mNWyyLzHqeNDpXXNcUtMkIYh4eWBTM": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "ProcessDocAiLambdaFunction"
+              },
+              "CodeSha256": "dhyHKzTsVWnK+P4tsp3GKTY7lUKGlEFBez9OEm9Nras="
+            }
+          },
+          "SaveResultsLambdaVersionOnOqym9blbwi4RtSFTfCQE6XKOitw2LKh6AMp5oxgK4": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "SaveResultsLambdaFunction"
+              },
+              "CodeSha256": "dhyHKzTsVWnK+P4tsp3GKTY7lUKGlEFBez9OEm9Nras="
+            }
+          },
+          "ValidateIsapreLambdaVersionCva7SRgBZlIYkU8fPHuBTLsDPUVHKXWSVfbAbVsUU": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "ValidateIsapreLambdaFunction"
+              },
+              "CodeSha256": "dhyHKzTsVWnK+P4tsp3GKTY7lUKGlEFBez9OEm9Nras="
+            }
+          },
+          "ProcessDocAiCustomS31": {
+            "Type": "Custom::S3",
+            "Version": "1.0",
+            "DependsOn": [
+              "ProcessDocAiLambdaFunction",
+              "CustomDashresourceDashexistingDashs3LambdaFunction"
+            ],
+            "Properties": {
+              "ServiceToken": "<REDACTED>",
+              "FunctionName": "arquitectura-docai-dev-processDocAi",
+              "BucketName": "docai-pipeline-bucket-dev",
+              "BucketConfigs": [
+                {
+                  "Event": "s3:ObjectCreated:*",
+                  "Rules": []
+                }
+              ]
+            }
+          },
+          "CustomDashresourceDashexistingDashs3LambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": "serverless-framework-deployments-us-east-1-cdd5d4b1-5fe9",
+                "S3Key": "serverless/arquitectura-docai/dev/1762436817685-2025-11-06T13:46:57.685Z/custom-resources.zip"
+              },
+              "FunctionName": "arquitectura-docai-dev-custom-resource-existing-s3",
+              "Handler": "s3/handler.handler",
+              "MemorySize": 1024,
+              "Runtime": "nodejs22.x",
+              "Timeout": 180,
+              "Role": "arn:aws:iam::905418069528:role/LabRole"
+            },
+            "DependsOn": [
+              "CustomDashresourceDashexistingDashs3LogGroup"
+            ]
+          },
+          "CustomDashresourceDashexistingDashs3LogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/arquitectura-docai-dev-custom-resource-existing-s3"
+            }
+          },
+          "ApiGatewayRestApi": {
+            "Type": "AWS::ApiGateway::RestApi",
+            "Properties": {
+              "Name": "dev-arquitectura-docai",
+              "EndpointConfiguration": {
+                "Types": [
+                  "EDGE"
+                ]
+              },
+              "Policy": ""
+            }
+          },
+          "ApiGatewayResourceUpload": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "ParentId": {
+                "Fn::GetAtt": [
+                  "ApiGatewayRestApi",
+                  "RootResourceId"
+                ]
+              },
+              "PathPart": "upload",
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayMethodUploadOptions": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "AuthorizationType": "NONE",
+              "HttpMethod": "OPTIONS",
+              "MethodResponses": [
+                {
+                  "StatusCode": "200",
+                  "ResponseParameters": {
+                    "method.response.header.Access-Control-Allow-Origin": true,
+                    "method.response.header.Access-Control-Allow-Headers": true,
+                    "method.response.header.Access-Control-Allow-Methods": true
+                  },
+                  "ResponseModels": {}
+                }
+              ],
+              "RequestParameters": {},
+              "Integration": {
+                "Type": "MOCK",
+                "RequestTemplates": {
+                  "application/json": "{statusCode:200}"
+                },
+                "ContentHandling": "CONVERT_TO_TEXT",
+                "IntegrationResponses": [
+                  {
+                    "StatusCode": "200",
+                    "ResponseParameters": {
+                      "method.response.header.Access-Control-Allow-Origin": "'*'",
+                      "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'",
+                      "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'"
+                    },
+                    "ResponseTemplates": {
+                      "application/json": ""
+                    }
+                  }
+                ]
+              },
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceUpload"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayMethodUploadPost": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "HttpMethod": "POST",
+              "RequestParameters": {},
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceUpload"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "ApiKeyRequired": "<REDACTED>",
+              "AuthorizationType": "NONE",
+              "Integration": {
+                "IntegrationHttpMethod": "POST",
+                "Type": "AWS_PROXY",
+                "Uri": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":apigateway:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":lambda:path/2015-03-31/functions/",
+                      {
+                        "Fn::GetAtt": [
+                          "UploadHandlerLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "/invocations"
+                    ]
+                  ]
+                }
+              },
+              "MethodResponses": []
+            },
+            "DependsOn": [
+              "UploadHandlerLambdaPermissionApiGateway"
+            ]
+          },
+          "ApiGatewayDeployment1762436800340": {
+            "Type": "AWS::ApiGateway::Deployment",
+            "Properties": {
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "StageName": "dev"
+            },
+            "DependsOn": [
+              "ApiGatewayMethodUploadOptions",
+              "ApiGatewayMethodUploadPost"
+            ]
+          },
+          "UploadHandlerLambdaPermissionApiGateway": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "UploadHandlerLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "ApiGatewayRestApi"
+                    },
+                    "/*/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "SaveResultsSnsSubscriptionDocAiTopic": {
+            "Type": "AWS::SNS::Subscription",
+            "Properties": {
+              "TopicArn": {
+                "Ref": "DocAiTopic"
+              },
+              "Protocol": "lambda",
+              "Endpoint": {
+                "Fn::GetAtt": [
+                  "SaveResultsLambdaFunction",
+                  "Arn"
+                ]
+              }
+            }
+          },
+          "SaveResultsLambdaPermissionDocAiTopicSNS": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "SaveResultsLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "sns.amazonaws.com",
+              "SourceArn": {
+                "Ref": "DocAiTopic"
+              }
+            }
+          },
+          "ValidateIsapreSnsSubscriptionIsapreTopic": {
+            "Type": "AWS::SNS::Subscription",
+            "Properties": {
+              "TopicArn": {
+                "Ref": "IsapreTopic"
+              },
+              "Protocol": "lambda",
+              "Endpoint": {
+                "Fn::GetAtt": [
+                  "ValidateIsapreLambdaFunction",
+                  "Arn"
+                ]
+              }
+            }
+          },
+          "ValidateIsapreLambdaPermissionIsapreTopicSNS": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "ValidateIsapreLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "sns.amazonaws.com",
+              "SourceArn": {
+                "Ref": "IsapreTopic"
+              }
+            }
+          },
+          "DocAiTopic": {
+            "Type": "AWS::SNS::Topic",
+            "Properties": {
+              "TopicName": "DocAiTopic"
+            }
+          },
+          "IsapreTopic": {
+            "Type": "AWS::SNS::Topic",
+            "Properties": {
+              "TopicName": "IsapreTopic"
+            }
+          },
+          "DocAiResultsTable": {
+            "Type": "AWS::DynamoDB::Table",
+            "Properties": {
+              "TableName": "DocAiResults-dev",
+              "AttributeDefinitions": [
+                {
+                  "AttributeName": "Id",
+                  "AttributeType": "S"
+                }
+              ],
+              "KeySchema": [
+                {
+                  "AttributeName": "Id",
+                  "KeyType": "HASH"
+                }
+              ],
+              "BillingMode": "PAY_PER_REQUEST"
+            }
+          },
+          "DocAiBucket": {
+            "Type": "AWS::S3::Bucket",
+            "Properties": {
+              "BucketName": "docai-pipeline-bucket-dev"
+            }
+          }
+        },
+        "Outputs": {
+          "ServerlessDeploymentBucketName": {
+            "Value": "serverless-framework-deployments-us-east-1-cdd5d4b1-5fe9",
+            "Export": {
+              "Name": "sls-arquitectura-docai-dev-ServerlessDeploymentBucketName"
+            }
+          },
+          "UploadHandlerLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "UploadHandlerLambdaVersionFea324X5kT4clQLFmAoQMD4N4s37GM3wTSBIXaj36Ng"
+            },
+            "Export": {
+              "Name": "sls-arquitectura-docai-dev-UploadHandlerLambdaFunctionQualifiedArn"
+            }
+          },
+          "ProcessDocAiLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "ProcessDocAiLambdaVersionkqiDfrmli5mNWyyLzHqeNDpXXNcUtMkIYh4eWBTM"
+            },
+            "Export": {
+              "Name": "sls-arquitectura-docai-dev-ProcessDocAiLambdaFunctionQualifiedArn"
+            }
+          },
+          "SaveResultsLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "SaveResultsLambdaVersionOnOqym9blbwi4RtSFTfCQE6XKOitw2LKh6AMp5oxgK4"
+            },
+            "Export": {
+              "Name": "sls-arquitectura-docai-dev-SaveResultsLambdaFunctionQualifiedArn"
+            }
+          },
+          "ValidateIsapreLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "ValidateIsapreLambdaVersionCva7SRgBZlIYkU8fPHuBTLsDPUVHKXWSVfbAbVsUU"
+            },
+            "Export": {
+              "Name": "sls-arquitectura-docai-dev-ValidateIsapreLambdaFunctionQualifiedArn"
+            }
+          },
+          "ServiceEndpoint": {
+            "Description": "URL of the service endpoint",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "https://",
+                  {
+                    "Ref": "ApiGatewayRestApi"
+                  },
+                  ".execute-api.",
+                  {
+                    "Ref": "AWS::Region"
+                  },
+                  ".",
+                  {
+                    "Ref": "AWS::URLSuffix"
+                  },
+                  "/dev"
+                ]
+              ]
+            },
+            "Export": {
+              "Name": "sls-arquitectura-docai-dev-ServiceEndpoint"
+            }
+          }
+        }
+      },
+      "vpc": {}
+    },
+    "dashboard": {
+      "isEnabledForService": false,
+      "requiredAuthentication": false,
+      "orgFeaturesInUse": null,
+      "orgObservabilityIntegrations": null,
+      "serviceAppId": null,
+      "serviceProvider": null,
+      "instanceParameters": null
+    },
+    "serviceRawFile": "service: arquitectura-docai\n\nplugins:\n  - serverless-prune-plugin\n  - serverless-scriptable-plugin\n  - serverless-offline\n\ncustom:\n  serverless-offline:\n    httpPort: 3005\n    lambdaPort: 3006\n    noPrependStageInUrl: true\n\n  prune:\n    automatic: true\n    number: 5\n\nprovider:\n  name: aws\n  runtime: nodejs20.x\n  region: us-east-1\n  role: arn:aws:iam::905418069528:role/LabRole\n  cfnRole: arn:aws:iam::905418069528:role/LabRole\n\n\n  environment:\n    BUCKET: docai-pipeline-bucket-${sls:stage}\n    DDB_TABLE: DocAiResults-${sls:stage}\n    SNS_ISAPRE_ARN:\n      Ref: IsapreTopic\n    SNS_DOCAI_ARN:\n      Ref: DocAiTopic\n    DOCUMENT_AI_PROJECT_ID: river-lane-475622-h4\n    DOCUMENT_AI_LOCATION: us\n    DOCUMENT_AI_PROCESSOR_ID: b9319e0d7e047ae5\n    DOCUMENT_AI_PROCESSOR_VERSION_ID: pretrained-foundation-model-v1.5.1-2025-08-07\n\nfunctions:\n  # 1️⃣ Subida de bono (opcional si la subida no viene desde API Gateway)\n  uploadHandler:\n    handler: src/handlers/uploadHandler.main\n    events:\n      - http:\n          path: upload\n          method: post\n          cors: true\n\n  # 2️⃣ Procesamiento con Google Document AI\n  processDocAi:\n    handler: src/handlers/processDocAi.main\n    timeout: 60\n    memorySize: 512\n    events:\n      - s3:\n          bucket: ${self:provider.environment.BUCKET}\n          event: s3:ObjectCreated:*\n          existing: true\n\n  # 3️⃣ Guarda el resultado en DynamoDB\n  saveResults:\n    handler: src/handlers/saveResults.main\n    events:\n      - sns:\n          arn: ${self:provider.environment.SNS_DOCAI_ARN}\n          topicName: DocAiTopic\n\n  # 4️⃣ Validación y envío de datos a ISAPRE\n  validateIsapre:\n    handler: src/handlers/validateIsapre.main\n    events:\n      - sns:\n          arn: ${self:provider.environment.SNS_ISAPRE_ARN}\n          topicName: IsapreTopic\n\nresources:\n  Resources:\n    DocAiTopic:\n      Type: AWS::SNS::Topic\n      Properties:\n        TopicName: DocAiTopic\n    IsapreTopic:\n      Type: AWS::SNS::Topic\n      Properties:\n        TopicName: IsapreTopic\n    DocAiResultsTable:\n      Type: AWS::DynamoDB::Table\n      Properties:\n        TableName: ${self:provider.environment.DDB_TABLE}\n        AttributeDefinitions:\n          - AttributeName: Id\n            AttributeType: S\n        KeySchema:\n          - AttributeName: Id\n            KeyType: HASH\n        BillingMode: PAY_PER_REQUEST\n    DocAiBucket:\n      Type: AWS::S3::Bucket\n      Properties:\n        BucketName: ${self:provider.environment.BUCKET}\n",
+    "command": [
+      "deploy"
+    ],
+    "options": {},
+    "orgId": "7c34869c-db51-4625-953d-e8d770be4c57",
+    "orgName": "awsss",
+    "userId": "VlJV5l9w49NjCrZD2p",
+    "userName": "awsss",
+    "serviceProviderAwsAccountId": "905418069528",
+    "serviceProviderAwsCfStackName": "arquitectura-docai-dev",
+    "serviceProviderAwsCfStackId": "arn:aws:cloudformation:us-east-1:905418069528:stack/arquitectura-docai-dev/942e4810-bb0f-11f0-a6fa-0affc530193b",
+    "serviceProviderAwsCfStackCreated": "2025-11-06T12:53:23.536Z",
+    "serviceProviderAwsCfStackUpdated": "2025-11-06T13:19:45.801Z",
+    "serviceProviderAwsCfStackStatus": "UPDATE_COMPLETE",
+    "serviceProviderAwsCfStackOutputs": [
+      {
+        "OutputKey": "SaveResultsLambdaFunctionQualifiedArn",
+        "OutputValue": "arn:aws:lambda:us-east-1:905418069528:function:arquitectura-docai-dev-saveResults:5",
+        "Description": "Current Lambda function version",
+        "ExportName": "sls-arquitectura-docai-dev-SaveResultsLambdaFunctionQualifiedArn"
+      },
+      {
+        "OutputKey": "UploadHandlerLambdaFunctionQualifiedArn",
+        "OutputValue": "arn:aws:lambda:us-east-1:905418069528:function:arquitectura-docai-dev-uploadHandler:5",
+        "Description": "Current Lambda function version",
+        "ExportName": "sls-arquitectura-docai-dev-UploadHandlerLambdaFunctionQualifiedArn"
+      },
+      {
+        "OutputKey": "ProcessDocAiLambdaFunctionQualifiedArn",
+        "OutputValue": "arn:aws:lambda:us-east-1:905418069528:function:arquitectura-docai-dev-processDocAi:5",
+        "Description": "Current Lambda function version",
+        "ExportName": "sls-arquitectura-docai-dev-ProcessDocAiLambdaFunctionQualifiedArn"
+      },
+      {
+        "OutputKey": "ValidateIsapreLambdaFunctionQualifiedArn",
+        "OutputValue": "arn:aws:lambda:us-east-1:905418069528:function:arquitectura-docai-dev-validateIsapre:5",
+        "Description": "Current Lambda function version",
+        "ExportName": "sls-arquitectura-docai-dev-ValidateIsapreLambdaFunctionQualifiedArn"
+      },
+      {
+        "OutputKey": "ServiceEndpoint",
+        "OutputValue": "https://ruyk8v516i.execute-api.us-east-1.amazonaws.com/dev",
+        "Description": "URL of the service endpoint",
+        "ExportName": "sls-arquitectura-docai-dev-ServiceEndpoint"
+      },
+      {
+        "OutputKey": "ServerlessDeploymentBucketName",
+        "OutputValue": "serverless-framework-deployments-us-east-1-cdd5d4b1-5fe9",
+        "ExportName": "sls-arquitectura-docai-dev-ServerlessDeploymentBucketName"
+      }
+    ],
+    "compiledCloudFormationTemplate": {
+      "AWSTemplateFormatVersion": "2010-09-09",
+      "Description": "The AWS CloudFormation template for this Serverless application",
+      "Resources": {
+        "UploadHandlerLogGroup": {
+          "Type": "AWS::Logs::LogGroup",
+          "Properties": {
+            "LogGroupName": "/aws/lambda/arquitectura-docai-dev-uploadHandler"
+          }
+        },
+        "ProcessDocAiLogGroup": {
+          "Type": "AWS::Logs::LogGroup",
+          "Properties": {
+            "LogGroupName": "/aws/lambda/arquitectura-docai-dev-processDocAi"
+          }
+        },
+        "SaveResultsLogGroup": {
+          "Type": "AWS::Logs::LogGroup",
+          "Properties": {
+            "LogGroupName": "/aws/lambda/arquitectura-docai-dev-saveResults"
+          }
+        },
+        "ValidateIsapreLogGroup": {
+          "Type": "AWS::Logs::LogGroup",
+          "Properties": {
+            "LogGroupName": "/aws/lambda/arquitectura-docai-dev-validateIsapre"
+          }
+        },
+        "UploadHandlerLambdaFunction": {
+          "Type": "AWS::Lambda::Function",
+          "Properties": {
+            "Code": {
+              "S3Bucket": "serverless-framework-deployments-us-east-1-cdd5d4b1-5fe9",
+              "S3Key": "serverless/arquitectura-docai/dev/1762436817685-2025-11-06T13:46:57.685Z/arquitectura-docai.zip"
+            },
+            "Handler": "src/handlers/uploadHandler.main",
+            "Runtime": "nodejs20.x",
+            "FunctionName": "arquitectura-docai-dev-uploadHandler",
+            "MemorySize": 1024,
+            "Timeout": 6,
+            "Environment": {
+              "Variables": {
+                "BUCKET": "docai-pipeline-bucket-dev",
+                "DDB_TABLE": "DocAiResults-dev",
+                "SNS_ISAPRE_ARN": {
+                  "Ref": "IsapreTopic"
+                },
+                "SNS_DOCAI_ARN": {
+                  "Ref": "DocAiTopic"
+                },
+                "DOCUMENT_AI_PROJECT_ID": "river-lane-475622-h4",
+                "DOCUMENT_AI_LOCATION": "us",
+                "DOCUMENT_AI_PROCESSOR_ID": "b9319e0d7e047ae5",
+                "DOCUMENT_AI_PROCESSOR_VERSION_ID": "pretrained-foundation-model-v1.5.1-2025-08-07"
+              }
+            },
+            "Role": "arn:aws:iam::905418069528:role/LabRole"
+          },
+          "DependsOn": [
+            "UploadHandlerLogGroup"
+          ]
+        },
+        "ProcessDocAiLambdaFunction": {
+          "Type": "AWS::Lambda::Function",
+          "Properties": {
+            "Code": {
+              "S3Bucket": "serverless-framework-deployments-us-east-1-cdd5d4b1-5fe9",
+              "S3Key": "serverless/arquitectura-docai/dev/1762436817685-2025-11-06T13:46:57.685Z/arquitectura-docai.zip"
+            },
+            "Handler": "src/handlers/processDocAi.main",
+            "Runtime": "nodejs20.x",
+            "FunctionName": "arquitectura-docai-dev-processDocAi",
+            "MemorySize": 512,
+            "Timeout": 60,
+            "Environment": {
+              "Variables": {
+                "BUCKET": "docai-pipeline-bucket-dev",
+                "DDB_TABLE": "DocAiResults-dev",
+                "SNS_ISAPRE_ARN": {
+                  "Ref": "IsapreTopic"
+                },
+                "SNS_DOCAI_ARN": {
+                  "Ref": "DocAiTopic"
+                },
+                "DOCUMENT_AI_PROJECT_ID": "river-lane-475622-h4",
+                "DOCUMENT_AI_LOCATION": "us",
+                "DOCUMENT_AI_PROCESSOR_ID": "b9319e0d7e047ae5",
+                "DOCUMENT_AI_PROCESSOR_VERSION_ID": "pretrained-foundation-model-v1.5.1-2025-08-07"
+              }
+            },
+            "Role": "arn:aws:iam::905418069528:role/LabRole"
+          },
+          "DependsOn": [
+            "ProcessDocAiLogGroup"
+          ]
+        },
+        "SaveResultsLambdaFunction": {
+          "Type": "AWS::Lambda::Function",
+          "Properties": {
+            "Code": {
+              "S3Bucket": "serverless-framework-deployments-us-east-1-cdd5d4b1-5fe9",
+              "S3Key": "serverless/arquitectura-docai/dev/1762436817685-2025-11-06T13:46:57.685Z/arquitectura-docai.zip"
+            },
+            "Handler": "src/handlers/saveResults.main",
+            "Runtime": "nodejs20.x",
+            "FunctionName": "arquitectura-docai-dev-saveResults",
+            "MemorySize": 1024,
+            "Timeout": 6,
+            "Environment": {
+              "Variables": {
+                "BUCKET": "docai-pipeline-bucket-dev",
+                "DDB_TABLE": "DocAiResults-dev",
+                "SNS_ISAPRE_ARN": {
+                  "Ref": "IsapreTopic"
+                },
+                "SNS_DOCAI_ARN": {
+                  "Ref": "DocAiTopic"
+                },
+                "DOCUMENT_AI_PROJECT_ID": "river-lane-475622-h4",
+                "DOCUMENT_AI_LOCATION": "us",
+                "DOCUMENT_AI_PROCESSOR_ID": "b9319e0d7e047ae5",
+                "DOCUMENT_AI_PROCESSOR_VERSION_ID": "pretrained-foundation-model-v1.5.1-2025-08-07"
+              }
+            },
+            "Role": "arn:aws:iam::905418069528:role/LabRole"
+          },
+          "DependsOn": [
+            "SaveResultsLogGroup"
+          ]
+        },
+        "ValidateIsapreLambdaFunction": {
+          "Type": "AWS::Lambda::Function",
+          "Properties": {
+            "Code": {
+              "S3Bucket": "serverless-framework-deployments-us-east-1-cdd5d4b1-5fe9",
+              "S3Key": "serverless/arquitectura-docai/dev/1762436817685-2025-11-06T13:46:57.685Z/arquitectura-docai.zip"
+            },
+            "Handler": "src/handlers/validateIsapre.main",
+            "Runtime": "nodejs20.x",
+            "FunctionName": "arquitectura-docai-dev-validateIsapre",
+            "MemorySize": 1024,
+            "Timeout": 6,
+            "Environment": {
+              "Variables": {
+                "BUCKET": "docai-pipeline-bucket-dev",
+                "DDB_TABLE": "DocAiResults-dev",
+                "SNS_ISAPRE_ARN": {
+                  "Ref": "IsapreTopic"
+                },
+                "SNS_DOCAI_ARN": {
+                  "Ref": "DocAiTopic"
+                },
+                "DOCUMENT_AI_PROJECT_ID": "river-lane-475622-h4",
+                "DOCUMENT_AI_LOCATION": "us",
+                "DOCUMENT_AI_PROCESSOR_ID": "b9319e0d7e047ae5",
+                "DOCUMENT_AI_PROCESSOR_VERSION_ID": "pretrained-foundation-model-v1.5.1-2025-08-07"
+              }
+            },
+            "Role": "arn:aws:iam::905418069528:role/LabRole"
+          },
+          "DependsOn": [
+            "ValidateIsapreLogGroup"
+          ]
+        },
+        "UploadHandlerLambdaVersionFea324X5kT4clQLFmAoQMD4N4s37GM3wTSBIXaj36Ng": {
+          "Type": "AWS::Lambda::Version",
+          "DeletionPolicy": "Retain",
+          "Properties": {
+            "FunctionName": {
+              "Ref": "UploadHandlerLambdaFunction"
+            },
+            "CodeSha256": "dhyHKzTsVWnK+P4tsp3GKTY7lUKGlEFBez9OEm9Nras="
+          }
+        },
+        "ProcessDocAiLambdaVersionkqiDfrmli5mNWyyLzHqeNDpXXNcUtMkIYh4eWBTM": {
+          "Type": "AWS::Lambda::Version",
+          "DeletionPolicy": "Retain",
+          "Properties": {
+            "FunctionName": {
+              "Ref": "ProcessDocAiLambdaFunction"
+            },
+            "CodeSha256": "dhyHKzTsVWnK+P4tsp3GKTY7lUKGlEFBez9OEm9Nras="
+          }
+        },
+        "SaveResultsLambdaVersionOnOqym9blbwi4RtSFTfCQE6XKOitw2LKh6AMp5oxgK4": {
+          "Type": "AWS::Lambda::Version",
+          "DeletionPolicy": "Retain",
+          "Properties": {
+            "FunctionName": {
+              "Ref": "SaveResultsLambdaFunction"
+            },
+            "CodeSha256": "dhyHKzTsVWnK+P4tsp3GKTY7lUKGlEFBez9OEm9Nras="
+          }
+        },
+        "ValidateIsapreLambdaVersionCva7SRgBZlIYkU8fPHuBTLsDPUVHKXWSVfbAbVsUU": {
+          "Type": "AWS::Lambda::Version",
+          "DeletionPolicy": "Retain",
+          "Properties": {
+            "FunctionName": {
+              "Ref": "ValidateIsapreLambdaFunction"
+            },
+            "CodeSha256": "dhyHKzTsVWnK+P4tsp3GKTY7lUKGlEFBez9OEm9Nras="
+          }
+        },
+        "ProcessDocAiCustomS31": {
+          "Type": "Custom::S3",
+          "Version": "1.0",
+          "DependsOn": [
+            "ProcessDocAiLambdaFunction",
+            "CustomDashresourceDashexistingDashs3LambdaFunction"
+          ],
+          "Properties": {
+            "ServiceToken": "<REDACTED>",
+            "FunctionName": "arquitectura-docai-dev-processDocAi",
+            "BucketName": "docai-pipeline-bucket-dev",
+            "BucketConfigs": [
+              {
+                "Event": "s3:ObjectCreated:*",
+                "Rules": []
+              }
+            ]
+          }
+        },
+        "CustomDashresourceDashexistingDashs3LambdaFunction": {
+          "Type": "AWS::Lambda::Function",
+          "Properties": {
+            "Code": {
+              "S3Bucket": "serverless-framework-deployments-us-east-1-cdd5d4b1-5fe9",
+              "S3Key": "serverless/arquitectura-docai/dev/1762436817685-2025-11-06T13:46:57.685Z/custom-resources.zip"
+            },
+            "FunctionName": "arquitectura-docai-dev-custom-resource-existing-s3",
+            "Handler": "s3/handler.handler",
+            "MemorySize": 1024,
+            "Runtime": "nodejs22.x",
+            "Timeout": 180,
+            "Role": "arn:aws:iam::905418069528:role/LabRole"
+          },
+          "DependsOn": [
+            "CustomDashresourceDashexistingDashs3LogGroup"
+          ]
+        },
+        "CustomDashresourceDashexistingDashs3LogGroup": {
+          "Type": "AWS::Logs::LogGroup",
+          "Properties": {
+            "LogGroupName": "/aws/lambda/arquitectura-docai-dev-custom-resource-existing-s3"
+          }
+        },
+        "ApiGatewayRestApi": {
+          "Type": "AWS::ApiGateway::RestApi",
+          "Properties": {
+            "Name": "dev-arquitectura-docai",
+            "EndpointConfiguration": {
+              "Types": [
+                "EDGE"
+              ]
+            },
+            "Policy": ""
+          }
+        },
+        "ApiGatewayResourceUpload": {
+          "Type": "AWS::ApiGateway::Resource",
+          "Properties": {
+            "ParentId": {
+              "Fn::GetAtt": [
+                "ApiGatewayRestApi",
+                "RootResourceId"
+              ]
+            },
+            "PathPart": "upload",
+            "RestApiId": {
+              "Ref": "ApiGatewayRestApi"
+            }
+          }
+        },
+        "ApiGatewayMethodUploadOptions": {
+          "Type": "AWS::ApiGateway::Method",
+          "Properties": {
+            "AuthorizationType": "NONE",
+            "HttpMethod": "OPTIONS",
+            "MethodResponses": [
+              {
+                "StatusCode": "200",
+                "ResponseParameters": {
+                  "method.response.header.Access-Control-Allow-Origin": true,
+                  "method.response.header.Access-Control-Allow-Headers": true,
+                  "method.response.header.Access-Control-Allow-Methods": true
+                },
+                "ResponseModels": {}
+              }
+            ],
+            "RequestParameters": {},
+            "Integration": {
+              "Type": "MOCK",
+              "RequestTemplates": {
+                "application/json": "{statusCode:200}"
+              },
+              "ContentHandling": "CONVERT_TO_TEXT",
+              "IntegrationResponses": [
+                {
+                  "StatusCode": "200",
+                  "ResponseParameters": {
+                    "method.response.header.Access-Control-Allow-Origin": "'*'",
+                    "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'",
+                    "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'"
+                  },
+                  "ResponseTemplates": {
+                    "application/json": ""
+                  }
+                }
+              ]
+            },
+            "ResourceId": {
+              "Ref": "ApiGatewayResourceUpload"
+            },
+            "RestApiId": {
+              "Ref": "ApiGatewayRestApi"
+            }
+          }
+        },
+        "ApiGatewayMethodUploadPost": {
+          "Type": "AWS::ApiGateway::Method",
+          "Properties": {
+            "HttpMethod": "POST",
+            "RequestParameters": {},
+            "ResourceId": {
+              "Ref": "ApiGatewayResourceUpload"
+            },
+            "RestApiId": {
+              "Ref": "ApiGatewayRestApi"
+            },
+            "ApiKeyRequired": "<REDACTED>",
+            "AuthorizationType": "NONE",
+            "Integration": {
+              "IntegrationHttpMethod": "POST",
+              "Type": "AWS_PROXY",
+              "Uri": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":apigateway:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":lambda:path/2015-03-31/functions/",
+                    {
+                      "Fn::GetAtt": [
+                        "UploadHandlerLambdaFunction",
+                        "Arn"
+                      ]
+                    },
+                    "/invocations"
+                  ]
+                ]
+              }
+            },
+            "MethodResponses": []
+          },
+          "DependsOn": [
+            "UploadHandlerLambdaPermissionApiGateway"
+          ]
+        },
+        "ApiGatewayDeployment1762436800340": {
+          "Type": "AWS::ApiGateway::Deployment",
+          "Properties": {
+            "RestApiId": {
+              "Ref": "ApiGatewayRestApi"
+            },
+            "StageName": "dev"
+          },
+          "DependsOn": [
+            "ApiGatewayMethodUploadOptions",
+            "ApiGatewayMethodUploadPost"
+          ]
+        },
+        "UploadHandlerLambdaPermissionApiGateway": {
+          "Type": "AWS::Lambda::Permission",
+          "Properties": {
+            "FunctionName": {
+              "Fn::GetAtt": [
+                "UploadHandlerLambdaFunction",
+                "Arn"
+              ]
+            },
+            "Action": "lambda:InvokeFunction",
+            "Principal": "apigateway.amazonaws.com",
+            "SourceArn": {
+              "Fn::Join": [
+                "",
+                [
+                  "arn:",
+                  {
+                    "Ref": "AWS::Partition"
+                  },
+                  ":execute-api:",
+                  {
+                    "Ref": "AWS::Region"
+                  },
+                  ":",
+                  {
+                    "Ref": "AWS::AccountId"
+                  },
+                  ":",
+                  {
+                    "Ref": "ApiGatewayRestApi"
+                  },
+                  "/*/*"
+                ]
+              ]
+            }
+          }
+        },
+        "SaveResultsSnsSubscriptionDocAiTopic": {
+          "Type": "AWS::SNS::Subscription",
+          "Properties": {
+            "TopicArn": {
+              "Ref": "DocAiTopic"
+            },
+            "Protocol": "lambda",
+            "Endpoint": {
+              "Fn::GetAtt": [
+                "SaveResultsLambdaFunction",
+                "Arn"
+              ]
+            }
+          }
+        },
+        "SaveResultsLambdaPermissionDocAiTopicSNS": {
+          "Type": "AWS::Lambda::Permission",
+          "Properties": {
+            "FunctionName": {
+              "Fn::GetAtt": [
+                "SaveResultsLambdaFunction",
+                "Arn"
+              ]
+            },
+            "Action": "lambda:InvokeFunction",
+            "Principal": "sns.amazonaws.com",
+            "SourceArn": {
+              "Ref": "DocAiTopic"
+            }
+          }
+        },
+        "ValidateIsapreSnsSubscriptionIsapreTopic": {
+          "Type": "AWS::SNS::Subscription",
+          "Properties": {
+            "TopicArn": {
+              "Ref": "IsapreTopic"
+            },
+            "Protocol": "lambda",
+            "Endpoint": {
+              "Fn::GetAtt": [
+                "ValidateIsapreLambdaFunction",
+                "Arn"
+              ]
+            }
+          }
+        },
+        "ValidateIsapreLambdaPermissionIsapreTopicSNS": {
+          "Type": "AWS::Lambda::Permission",
+          "Properties": {
+            "FunctionName": {
+              "Fn::GetAtt": [
+                "ValidateIsapreLambdaFunction",
+                "Arn"
+              ]
+            },
+            "Action": "lambda:InvokeFunction",
+            "Principal": "sns.amazonaws.com",
+            "SourceArn": {
+              "Ref": "IsapreTopic"
+            }
+          }
+        },
+        "DocAiTopic": {
+          "Type": "AWS::SNS::Topic",
+          "Properties": {
+            "TopicName": "DocAiTopic"
+          }
+        },
+        "IsapreTopic": {
+          "Type": "AWS::SNS::Topic",
+          "Properties": {
+            "TopicName": "IsapreTopic"
+          }
+        },
+        "DocAiResultsTable": {
+          "Type": "AWS::DynamoDB::Table",
+          "Properties": {
+            "TableName": "DocAiResults-dev",
+            "AttributeDefinitions": [
+              {
+                "AttributeName": "Id",
+                "AttributeType": "S"
+              }
+            ],
+            "KeySchema": [
+              {
+                "AttributeName": "Id",
+                "KeyType": "HASH"
+              }
+            ],
+            "BillingMode": "PAY_PER_REQUEST"
+          }
+        },
+        "DocAiBucket": {
+          "Type": "AWS::S3::Bucket",
+          "Properties": {
+            "BucketName": "docai-pipeline-bucket-dev"
+          }
+        }
+      },
+      "Outputs": {
+        "ServerlessDeploymentBucketName": {
+          "Value": "serverless-framework-deployments-us-east-1-cdd5d4b1-5fe9",
+          "Export": {
+            "Name": "sls-arquitectura-docai-dev-ServerlessDeploymentBucketName"
+          }
+        },
+        "UploadHandlerLambdaFunctionQualifiedArn": {
+          "Description": "Current Lambda function version",
+          "Value": {
+            "Ref": "UploadHandlerLambdaVersionFea324X5kT4clQLFmAoQMD4N4s37GM3wTSBIXaj36Ng"
+          },
+          "Export": {
+            "Name": "sls-arquitectura-docai-dev-UploadHandlerLambdaFunctionQualifiedArn"
+          }
+        },
+        "ProcessDocAiLambdaFunctionQualifiedArn": {
+          "Description": "Current Lambda function version",
+          "Value": {
+            "Ref": "ProcessDocAiLambdaVersionkqiDfrmli5mNWyyLzHqeNDpXXNcUtMkIYh4eWBTM"
+          },
+          "Export": {
+            "Name": "sls-arquitectura-docai-dev-ProcessDocAiLambdaFunctionQualifiedArn"
+          }
+        },
+        "SaveResultsLambdaFunctionQualifiedArn": {
+          "Description": "Current Lambda function version",
+          "Value": {
+            "Ref": "SaveResultsLambdaVersionOnOqym9blbwi4RtSFTfCQE6XKOitw2LKh6AMp5oxgK4"
+          },
+          "Export": {
+            "Name": "sls-arquitectura-docai-dev-SaveResultsLambdaFunctionQualifiedArn"
+          }
+        },
+        "ValidateIsapreLambdaFunctionQualifiedArn": {
+          "Description": "Current Lambda function version",
+          "Value": {
+            "Ref": "ValidateIsapreLambdaVersionCva7SRgBZlIYkU8fPHuBTLsDPUVHKXWSVfbAbVsUU"
+          },
+          "Export": {
+            "Name": "sls-arquitectura-docai-dev-ValidateIsapreLambdaFunctionQualifiedArn"
+          }
+        },
+        "ServiceEndpoint": {
+          "Description": "URL of the service endpoint",
+          "Value": {
+            "Fn::Join": [
+              "",
+              [
+                "https://",
+                {
+                  "Ref": "ApiGatewayRestApi"
+                },
+                ".execute-api.",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ".",
+                {
+                  "Ref": "AWS::URLSuffix"
+                },
+                "/dev"
+              ]
+            ]
+          },
+          "Export": {
+            "Name": "sls-arquitectura-docai-dev-ServiceEndpoint"
+          }
+        }
+      }
+    }
+  }
+}
